@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "452164667163",
+    "project_id": "achat-84a1d",
+    "storage_bucket": "achat-84a1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452164667163:android:df746f7ad716c4b3d075be",
+        "android_client_info": {
+          "package_name": "com.example.achat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "452164667163-d28a66p265mb84t8domc0poejn4tth5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ1NxRrh0s4nHmpLSQ6HK9vTAQfgEKfkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "452164667163-d28a66p265mb84t8domc0poejn4tth5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
