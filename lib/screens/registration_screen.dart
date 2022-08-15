@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, use_key_in_widget_constructors, use_build_context_synchronously, empty_catches, unnecessary_null_comparison
 
 import 'package:achat/componets/rondedbutton.dart';
 import 'package:achat/constants.dart';
 import 'package:achat/screens/chat_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
   late String email;
   late String password;
   @override
@@ -74,12 +76,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       email: email,
                       password: password,
                     );
+                    _firestore
+                        .collection("users")
+                        .add({'email': _auth.currentUser!.email});
                     if (newUser != null) {
                       Navigator.pushNamed(context, ChatScreen.id);
                     }
-                  } catch (e) {
-                    print(e.toString());
-                  }
+                  } catch (e) {}
                 })
           ],
         ),
