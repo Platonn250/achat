@@ -62,15 +62,15 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () async {
-                messagesStream();
+                // messagesStream();
                 // getMessages();
                 //Implement logout functionality
-                // try {
-                //   await _auth.signOut();
-                //   Navigator.pop(context);
-                // } catch (e) {
-                //   print(e.toString());
-                // }
+                try {
+                  await _auth.signOut();
+                  Navigator.pop(context);
+                } catch (e) {
+                  print(e.toString());
+                }
               }),
         ],
         title: Text('⚡️Chat'),
@@ -123,7 +123,9 @@ class _ChatScreenState extends State<ChatScreen> {
 class MessageBubble extends StatelessWidget {
   final String sender;
   final String text;
-  const MessageBubble({Key? key, required this.sender, required this.text})
+  final bool isMe;
+  const MessageBubble(
+      {Key? key, required this.sender, required this.text, required this.isMe})
       : super(key: key);
 
   @override
@@ -131,7 +133,8 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(
             sender,
@@ -139,16 +142,19 @@ class MessageBubble extends StatelessWidget {
           ),
           Material(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30)),
+              topLeft: isMe ? Radius.circular(30) : Radius.circular(0),
+              bottomLeft: isMe ? Radius.circular(30) : Radius.circular(30),
+              bottomRight: isMe ? Radius.circular(30) : Radius.circular(30),
+              topRight: isMe ? Radius.circular(0) : Radius.circular(30),
+            ),
             elevation: 5.0,
-            color: Colors.lightBlueAccent,
+            color: isMe ? Colors.lightBlueAccent : Colors.white,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
                 text,
-                style: TextStyle(fontSize: 14.0, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 14.0, color: isMe ? Colors.white : Colors.black),
               ),
             ),
           ),
@@ -173,20 +179,28 @@ class MessagesStream extends StatelessWidget {
             ),
           );
         }
-        final messages = snapshot.data!.docs;
+        final messages = snapshot.data!.docs.reversed;
         List<MessageBubble> messageBubbles = [];
 
         for (var message in messages) {
           final messageText = message.get('text');
           final messageSender = message.get('sender');
+          final currentUser = loggedInUser.email;
+          print(currentUser);
+
+          if (currentUser == messageSender) {
+            // the message is sent by current user
+          }
           final messageBubble = MessageBubble(
             sender: messageSender,
             text: messageText,
+            isMe: currentUser == messageSender,
           );
           messageBubbles.add(messageBubble);
         }
         return Expanded(
           child: ListView(
+            reverse: true,
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             children: messageBubbles,
           ),
